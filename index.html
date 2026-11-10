@@ -1,0 +1,611 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#185abd">
+<meta name="description" content="一份可以篡改现实的会议通知。">
+<title>会议通知.docx - Word</title>
+<style>
+:root{font-family:"Segoe UI","Microsoft YaHei UI","PingFang SC",sans-serif;color:#262626;background:#e8ebf0;--blue:#185abd;--line:#e1e4ea}
+*{box-sizing:border-box}body{margin:0}button,input{font:inherit}button{cursor:pointer}button:disabled{cursor:default;opacity:.48}button:focus-visible,a:focus-visible{outline:2px solid var(--blue);outline-offset:3px}[hidden]{display:none!important}
+.icon{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.55;stroke-linecap:round;stroke-linejoin:round;flex:none;vertical-align:middle}
+.app{position:sticky;top:0;z-index:2;background:#f9fafe;box-shadow:0 2px 7px #172c4c16}
+.titlebar{height:48px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;gap:16px;border-bottom:1px solid #e8edf5}
+.title-left,.title-right{display:flex;align-items:center;gap:12px;white-space:nowrap}.title-left{min-width:0}.doc-name{font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis}
+.word{display:grid;place-items:center;width:25px;height:25px;background:#215cb8;color:white;font:bold 15px "Segoe UI",sans-serif;border-radius:4px;box-shadow:inset 0 -5px #12468e;flex:none}
+.quick{display:flex;align-items:center;gap:2px;border-right:1px solid var(--line);padding-right:9px}.icon-button{border:0;background:transparent;color:#43546d;padding:6px;border-radius:4px;display:inline-grid;place-items:center}.icon-button:hover:not(:disabled){background:#e6eefb}
+.doc-state{font-size:11px;color:#657388}.clock{font:600 12px ui-monospace,Consolas,monospace;color:#253c61;background:#e8eef9;border-radius:5px;padding:5px 9px}
+.tabs{display:flex;align-items:center;justify-content:space-between;padding:0 24px;gap:12px;height:40px}.tab-list{display:flex;align-self:stretch;gap:18px}.tab{position:relative;border:0;background:none;color:#454e5d;font-size:13px;padding:0 6px;white-space:nowrap}.tab[aria-selected=true]{color:#164eaa;font-weight:700}.tab[aria-selected=true]::after{content:"";position:absolute;bottom:1px;left:5px;right:5px;height:3px;border-radius:2px;background:var(--blue)}
+.comment-toggle{display:flex;align-items:center;gap:6px;border:1px solid #dce2ec;border-radius:5px;background:#fff;padding:5px 10px;color:#334664;font-size:12px;white-space:nowrap}.comment-toggle:hover{background:#edf3fe}
+.ribbon{height:74px;display:flex;align-items:center;padding:8px 24px;background:white;border-top:1px solid #edf0f5;gap:16px;overflow:auto}.group{display:flex;align-items:center;gap:9px;padding:0 16px 0 0;min-height:48px;border-right:1px solid var(--line);flex:none}.group:last-child{border:0}.ribbon-btn{height:44px;border:1px solid transparent;border-radius:5px;background:transparent;color:#34445b;display:flex;align-items:center;gap:7px;padding:0 10px;font-size:13px;white-space:nowrap}.ribbon-btn:hover:not(:disabled){background:#eef4ff;border-color:#e1ebfc}.ribbon-btn.primary{background:var(--blue);color:white}.ribbon-btn.primary:hover{background:#104a9d}.ribbon-btn .icon{width:19px;height:19px}.ribbon-hint{font-size:12px;color:#657188;white-space:nowrap}
+.workspace{max-width:1140px;display:grid;grid-template-columns:minmax(0,780px) minmax(240px,285px);gap:24px;margin:auto;padding:15px 24px 52px;align-items:start}.workspace.focus{grid-template-columns:minmax(0,780px);justify-content:center}
+.ruler{height:16px;margin:0 35px 6px;border-bottom:1px solid #bfc7d5;background:repeating-linear-gradient(90deg,#adb9cc 0px,#adb9cc 1px,transparent 1px,transparent 14px) bottom 1px left/100% 4px no-repeat;display:flex;justify-content:space-between;color:#69768b;font:9px/10px Consolas,monospace;padding:0 4px}
+.paper{position:relative;min-height:650px;background:#fff;border:1px solid #d1d6df;box-shadow:0 3px 12px #172c4c13;padding:48px clamp(25px,6vw,82px) 38px;display:flex;flex-direction:column}
+.meta{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:11px;color:#576171;letter-spacing:.11em}.meta strong{color:#203e63;letter-spacing:.19em}
+.doc-heading{text-align:center;border-bottom:2px solid #253f66;padding:26px 0 17px;margin-bottom:24px}h1{font-family:"Songti SC","SimSun",serif;margin:0 0 10px;font-size:clamp(28px,4vw,39px);letter-spacing:.15em;color:#162741}.doc-heading p{font-size:12px;letter-spacing:.1em;color:#677083;margin:0}
+.intro,.outro{font-size:14px;line-height:1.9;margin:0 0 14px}.intro strong{font-weight:600}.fields{border:1px solid #dce3ee;width:100%;margin:0 0 18px}.row{display:grid;grid-template-columns:96px minmax(0,1fr);min-height:44px}.row+.row{border-top:1px solid #dce3ee}.row label{display:flex;align-items:center;padding:8px 13px;background:#f4f6fa;font-size:13px;color:#49586c;border-right:1px solid #dce3ee}
+.row input{width:100%;min-width:0;border:0;border-radius:0;background:linear-gradient(90deg,#f7faff,#fff 82%);color:#20344e;padding:8px 12px;font-size:15px;outline:none}.row input:hover{background:#eff5ff}.row input:focus{box-shadow:inset 0 0 0 2px #5290e6;background:#f2f7ff}.row input.changed{color:#164fa6;background:#eaf2ff}
+.outro{color:#465368}.outro a{color:#1a56a7;text-underline-offset:3px}
+.doc-footer{display:flex;justify-content:space-between;gap:12px;margin-top:auto;padding-top:16px;border-top:1px solid #e3e6ec;color:#697489;font-size:11px}
+.response{margin:2px 0 18px;background:#edf4ff;border-left:3px solid #5084d1;padding:10px 13px;color:#254571;font-size:13px;line-height:1.65}.response.win{background:#edf7ef;color:#245939;border-color:#488761}.response strong{display:block;margin-bottom:2px}
+.result-hint{margin:7px 0 0;padding-top:6px;border-top:1px solid #5084d142}.result-next{margin:8px 0 0;display:block;border:0;background:none;color:#174c93;font-size:13px;font-weight:600;text-decoration:underline;text-underline-offset:3px;padding:0}
+.review-fields{display:grid;gap:9px;margin:0 0 18px}.revision{margin:0;padding:8px 10px 10px;min-inline-size:0;border:1px solid #dce3ee}.revision legend{padding:0 5px;color:#304762;font-size:13px;font-weight:600}.revision-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+.revision-choice{display:flex;align-items:flex-start;gap:5px;padding:7px;border:1px solid #dce3ee;background:#f9fafd;border-radius:4px;cursor:pointer;line-height:1.45}.revision-choice:has(input:checked){background:#edf4ff;border-color:#6798de}.revision-choice input{margin:2px 2px 0 0;accent-color:#185abd;flex:none}.revision-verb{display:block;font-size:11px;color:#49586d}.revision-choice del,.revision-choice ins{font-size:13px}.revision-choice del{color:#a13541}.revision-choice ins{color:#1757a7}.revision-choice:has(input:checked) del{text-decoration:none;color:#20344e}
+.side{margin-top:22px;border:1px solid #d7dfe9;background:#f8fafd;border-radius:8px;box-shadow:0 2px 6px #1b2c4b08}.side-head{display:flex;align-items:center;justify-content:space-between;padding:10px 13px;border-bottom:1px solid #e1e6ee}.side-head h2{font-size:14px;margin:0;font-weight:650;color:#2c3d57}.side-inner{padding:12px}.card{background:white;border:1px solid #e0e6ef;border-radius:6px;padding:12px;margin-bottom:12px}.person{display:flex;align-items:center;gap:9px;font-size:12px}.avatar{width:29px;height:29px;border-radius:50%;background:#dceaff;color:#235795;display:grid;place-items:center;font-weight:700}.person time{font-size:10px;color:#647286;margin-left:auto}.card p{color:#45556d;font-size:12px;line-height:1.75;margin:9px 0 0}.micro{font-size:11px;color:#64748b;line-height:1.65;margin:8px 0 0}.aside-btn{color:#174c93;border:0;background:none;padding:0;margin-top:10px;font-size:12px;text-align:left}.aside-btn:hover{text-decoration:underline}
+.progress{padding:4px 2px 2px}.progress-head{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:#40516b;font-weight:650}.count{font-family:Consolas,monospace;color:#2361b6}.slots{display:grid;gap:6px;list-style:none;margin:9px 0 0;padding:0}.slot{border:1px dashed #d7dfe9;border-radius:4px;color:#5e6d83;font-size:11px;padding:6px 8px;display:flex;align-items:center;gap:8px}.slot .icon{width:13px;height:13px}.slot.found{border-style:solid;border-color:#d6e5f8;color:#25538f;background:#f0f6ff}
+.progress+.progress{margin-top:12px;padding-top:12px;border-top:1px solid #e1e6ee}
+.office-slots{grid-template-columns:repeat(2,minmax(0,1fr))}.person .annoying{background:#f5e9dc;color:#79502c}
+.status{position:fixed;bottom:0;left:0;right:0;background:#f8faff;border-top:1px solid #dce2ec;min-height:30px;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:5px 24px;color:#526078;font-size:11px;z-index:2}.status span:last-child{text-align:right}
+dialog{width:min(470px,calc(100% - 28px));border:1px solid #d6dfea;border-radius:10px;padding:20px 22px;color:#293c58;box-shadow:0 20px 60px #152e5a42}dialog::backdrop{background:#253e6252}dialog header{display:flex;align-items:center;justify-content:space-between;gap:10px}dialog h2{font-size:17px;margin:0}dialog p,dialog li{font-size:14px;line-height:1.75}dialog ul{padding-left:22px}dialog .muted{color:#64738a;font-size:12px}dialog .ribbon-btn{margin-top:14px;height:36px}
+@media(max-width:760px){.workspace{grid-template-columns:minmax(0,1fr);gap:13px;padding:12px 12px 44px}.side{margin-top:0}.paper{min-height:555px;padding-top:29px}.titlebar,.tabs,.ribbon,.status{padding-left:12px;padding-right:12px}.tab-list{gap:10px}.ribbon{height:58px;gap:7px}.group{min-height:37px;gap:4px;padding-right:6px}.ribbon-btn{height:36px;padding:0 7px}.ribbon-hint{display:none}.doc-heading{padding-top:22px}.slots{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:420px){.doc-state{display:none}.titlebar{gap:6px}.title-left{gap:6px}.quick{padding-right:4px}.row{grid-template-columns:76px minmax(0,1fr)}.row label{padding:8px}.paper{padding-inline:17px}.ribbon-btn{font-size:12px}.tab-list{gap:5px}}
+</style>
+</head>
+<body>
+<svg xmlns="http://www.w3.org/2000/svg" hidden>
+<symbol id="save-icon" viewBox="0 0 24 24"><path d="M4 3h13l3 3v15H4zM8 3v6h8V3M8 21v-7h8v7"/></symbol>
+<symbol id="undo-icon" viewBox="0 0 24 24"><path d="m9 5-5 5 5 5m-5-5h10a5 5 0 0 1 0 10h-3"/></symbol>
+<symbol id="comment-icon" viewBox="0 0 24 24"><path d="M4 4h16v12H9l-5 4zM8 8h8m-8 4h5"/></symbol>
+<symbol id="file-icon" viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6zM14 3v5h4M9 12h6m-6 4h6"/></symbol>
+<symbol id="history-icon" viewBox="0 0 24 24"><path d="M3 9a9 9 0 1 1 0 6m0-12v6h6m3-3v6l4 2"/></symbol>
+<symbol id="reset-icon" viewBox="0 0 24 24"><path d="M19 5v5h-5m5 0a7 7 0 1 0 0 6"/></symbol>
+<symbol id="lock-icon" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></symbol>
+<symbol id="check-icon" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+<symbol id="close-icon" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+</svg>
+<header class="app">
+  <div class="titlebar">
+    <div class="title-left">
+      <div class="word" aria-hidden="true">W</div>
+      <div class="quick">
+        <button class="icon-button" id="quick-save" type="submit" form="notice" title="保存（Ctrl+S）" aria-label="保存通知"><svg class="icon"><use href="#save-icon"/></svg></button>
+        <button class="icon-button" data-action="undo" title="撤销（Ctrl+Z）" aria-label="撤销修改" disabled><svg class="icon"><use href="#undo-icon"/></svg></button>
+      </div>
+      <span class="doc-name" id="doc-name">会议通知.docx</span>
+    </div>
+    <div class="title-right"><span class="doc-state" id="doc-state">已保存</span><span class="clock" id="clock">17:59</span></div>
+  </div>
+  <div class="tabs">
+    <div class="tab-list" role="tablist" aria-label="功能区">
+      <button class="tab" id="tab-home" role="tab" aria-controls="ribbon" aria-selected="true" data-tab="home">开始</button>
+      <button class="tab" id="tab-insert" role="tab" aria-controls="ribbon" aria-selected="false" tabindex="-1" data-tab="insert">插入</button>
+      <button class="tab" id="tab-review" role="tab" aria-controls="ribbon" aria-selected="false" tabindex="-1" data-tab="review">审阅</button>
+      <button class="tab" id="tab-view" role="tab" aria-controls="ribbon" aria-selected="false" tabindex="-1" data-tab="view">视图</button>
+    </div>
+    <button class="comment-toggle" data-action="comments" aria-expanded="true" aria-controls="comments"><svg class="icon"><use href="#comment-icon"/></svg> 批注</button>
+  </div>
+  <div class="ribbon" id="ribbon" role="tabpanel" aria-labelledby="tab-home">
+    <div class="group" data-ribbon="home">
+        <button class="ribbon-btn primary" type="submit" form="notice"><svg class="icon"><use href="#save-icon"/></svg><span id="save-label">保存通知</span></button>
+      <button class="ribbon-btn" data-action="undo" disabled><svg class="icon"><use href="#undo-icon"/></svg>撤销</button>
+      <button class="ribbon-btn" data-action="reset"><svg class="icon"><use href="#reset-icon"/></svg>重开</button>
+    </div>
+    <span class="ribbon-hint" id="edit-guide" data-ribbon="home">直接修改表格右列，再保存试试</span>
+    <div class="group" id="chapter-tools" hidden><button class="ribbon-btn" data-action="chapter"><svg class="icon"><use href="#file-icon"/></svg><span id="chapter-button"></span></button></div>
+    <div class="group" data-ribbon="insert" hidden><button class="ribbon-btn" data-action="attachment"><svg class="icon"><use href="#file-icon"/></svg>打开附件</button></div>
+    <div class="group" data-ribbon="review" hidden><button class="ribbon-btn" data-action="history"><svg class="icon"><use href="#history-icon"/></svg>修订记录</button></div>
+    <div class="group" data-ribbon="view" hidden><button class="ribbon-btn" data-action="comments"><svg class="icon"><use href="#comment-icon"/></svg>显示或隐藏批注</button></div>
+  </div>
+</header>
+<main class="workspace" id="workspace">
+  <div>
+    <div class="ruler" aria-hidden="true"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span></div>
+    <article class="paper">
+      <div class="meta"><strong>行政部 · 内部通知</strong><span id="doc-number">行字〔1759〕01 号</span></div>
+      <div class="doc-heading"><h1 id="doc-title" tabindex="-1">会议通知</h1><p id="doc-subtitle">关于召开减少无效会议专题会议的通知</p></div>
+      <p class="intro"><strong>各位同事：</strong><br><span id="doc-intro">为减少不必要的会议，经研究决定，临时召开一次会议研究此事。具体安排如下。</span></p>
+      <form id="notice" autocomplete="off">
+        <div class="fields" id="meeting-fields">
+          <div class="row"><label for="time">时间</label><input id="time" maxlength="50" value="今天 18:00" spellcheck="false"></div>
+          <div class="row"><label for="duration">时长</label><input id="duration" maxlength="50" value="60 分钟" spellcheck="false"></div>
+          <div class="row"><label for="people">参会人员</label><input id="people" maxlength="50" value="全体员工" spellcheck="false"></div>
+          <div class="row"><label for="topic">议题</label><input id="topic" maxlength="50" value="如何减少无效会议" spellcheck="false"></div>
+        </div>
+        <div class="review-fields" id="review-fields" hidden></div>
+      </form>
+      <div class="response" id="response" hidden>
+        <div role="status" aria-atomic="true"><strong id="result-title"></strong><span id="result-copy"></span><p class="result-hint" id="result-hint" hidden></p></div>
+        <button class="result-next" id="result-next" data-action="chapter" hidden>打开刚收到的复盘纪要 →</button>
+      </div>
+      <p class="outro"><span id="doc-outro">请参会人员提前 5 分钟到场。</span><br><a id="attachment-link" href="#attachment" data-action="attachment">附件 1　会议系统使用说明（节选）</a></p>
+      <footer class="doc-footer"><span>行政部</span><span>第 1 页 / 共 1 页</span></footer>
+    </article>
+  </div>
+  <aside class="side" id="comments" aria-labelledby="comment-heading">
+    <div class="side-head"><h2 id="comment-heading">批注</h2><button class="icon-button" data-action="comments" aria-label="关闭批注"><svg class="icon"><use href="#close-icon"/></svg></button></div>
+    <div class="side-inner">
+      <section class="card">
+        <div class="person"><span class="avatar" aria-hidden="true">林</span><strong>林同事</strong><time>17:59</time></div>
+        <p id="comment-copy">离下班还有一分钟。你能改通知，系统会照着发。想个办法，别让这会开起来。</p>
+        <button class="aside-btn" data-action="attachment">看看行政部的附件 ↗</button>
+      </section>
+      <section class="card">
+        <div class="person"><span class="avatar annoying" aria-hidden="true">周</span><strong>周同事</strong><time>17:59</time></div>
+        <p id="zhou-copy">占用大家两分钟。要是名单上没我，麻烦加一下。我最后补充一句就走。</p>
+      </section>
+      <section class="progress" aria-labelledby="progress-heading">
+        <div class="progress-head"><span id="progress-heading">已发现的结局</span><span class="count" id="count">0 / 5</span></div>
+        <ul class="slots" id="slots"></ul>
+        <p class="micro">每种结局只计一次。重开后仍保留已发现的结局。</p>
+      </section>
+      <section class="progress" id="office-progress" aria-labelledby="office-progress-heading">
+        <div class="progress-head"><span id="office-progress-heading">办公室支线</span><span class="count" id="office-count">0 / 15</span></div>
+        <p class="micro">有些结局要同时改几栏。两个人用顿号或「和」分开。时长也可以大胆一点。</p>
+        <ul class="slots office-slots" id="office-slots"></ul>
+      </section>
+    </div>
+  </aside>
+</main>
+<footer class="status"><span>第 1 页，共 1 页　 ·　中文（简体）</span><span id="chapter-name">第一关　17:59，请取消会议</span></footer>
+<dialog id="dialog" aria-labelledby="dialog-title">
+  <header><h2 id="dialog-title"></h2><button class="icon-button" id="close-dialog" aria-label="关闭"><svg class="icon"><use href="#close-icon"/></svg></button></header>
+  <div id="dialog-body"></div>
+</dialog>
+<script>
+const $ = (id) => document.getElementById(id);
+const fields = Array.from($('meeting-fields').querySelectorAll('input'));
+const labels = { time: '时间', duration: '时长', people: '参会人员', topic: '议题' };
+const reviewEdits = {
+  host: { label: '主持人', before: { value: 'zhou', text: '周同事' }, after: { value: 'document', text: '本文档' } },
+  recorder: { label: '记录员', before: { value: 'printer', text: '打印机' }, after: { value: 'robot', text: '归档机器人' } },
+  close: { label: '散会条件', before: { value: 'stamp', text: '盖章即散会' }, after: { value: 'speech', text: '主持人说完最后一句' } },
+};
+$('review-fields').innerHTML = Object.entries(reviewEdits).map(([key, edit]) => `
+  <fieldset class="revision">
+    <legend>${edit.label}</legend>
+    <div class="revision-options">
+      <label class="revision-choice">
+        <input type="radio" name="${key}" value="${edit.before.value}">
+        <span><span class="revision-verb">拒绝修订</span><del>${edit.before.text}</del></span>
+      </label>
+      <label class="revision-choice">
+        <input type="radio" name="${key}" value="${edit.after.value}">
+        <span><span class="revision-verb">接受修订</span><ins>${edit.after.text}</ins></span>
+      </label>
+    </div>
+  </fieldset>
+`).join('');
+const reviewControls = Array.from($('review-fields').querySelectorAll('input'));
+const chapters = [
+  {
+    initial: Object.fromEntries(fields.map((field) => [field.id, field.defaultValue])),
+    title: '会议通知',
+    subtitle: '关于召开减少无效会议专题会议的通知',
+    intro: '为减少不必要的会议，经研究决定，临时召开一次会议研究此事。具体安排如下。',
+    outro: '请参会人员提前 5 分钟到场。',
+    comment: '离下班还有一分钟，想办法把会取消。需要打掩护就把我写进名单。要是周同事问起来，我就说你去厕所摸鱼……算了，我只说前半句。',
+    zhou: '占用大家两分钟。要是名单上没我，麻烦加一下。我最后补充一句就走。',
+    attachment: '会议系统使用说明',
+    rules: [
+      '第 3 条　邀请名单为空时，系统会自行处理。',
+      '第 7 条　系统会归档已经过去的会议。',
+      '第 9 条　同一次保存可以处理多处修订。名单里有多个人时，请用顿号分开。',
+      '页边手写补充：「上次有人只改了议题。系统居然照着办了。」',
+    ],
+    name: '第一关　17:59，请取消会议',
+  },
+  {
+    initial: { host: '', recorder: '', close: '' },
+    title: '复盘纪要',
+    subtitle: '本文档将在保存时执行会议结论',
+    intro: '会议是取消了。周同事坚持要复盘一下取消得好不好，还提交了三处修订。请逐条处理，看看能不能让这份纪要自己散会。',
+    outro: '请确认纪要内的「最后一句」确实是最后一句。',
+    comment: '让周同事当主持人，他刚说完「最后」就会想起一个新问题。你试过把主持权交给这份文档吗？',
+    zhou: '我最后补充一句。至于这句是什么，我等会儿再补充。',
+    attachment: '两位记录员的使用说明',
+    rules: [
+      '打印机负责纸质盖章。它会打字，开不了口。',
+      '归档机器人会朗读文档的页脚，但它的电子章一直没装好。',
+      '本次复盘允许文档担任主持人。行政部说以前没试过，你可以试一下。',
+    ],
+    name: '第二关　这会到底怎么散',
+  },
+];
+const endings = {
+  yesterday: { title: '昨天见', copy: '系统补发了一份纪要：与会人员一致同意取消本次会议。考勤系统提示「您已于昨天准时下班」。', win: true },
+  empty: { title: '群聊已解散', copy: '系统找不到参会人，已取消会议。行政部随后向「无人」发送了一封感谢信。', win: true },
+  boss: { title: '一人全票通过', copy: '老板独自参会，批注「这个会很高效，以后每周开一次。」你的日历空了，他的满了。', win: true },
+  zero: { title: '零分钟会议', copy: '开场白刚说完，会议就结束了。行政部为复盘这场零分钟会议又约了半小时。', win: false },
+  home: { title: '流动会议室', copy: '系统把会议地点设在回家路上。电梯到了一楼，全员依次说「我先下了」。会议自动结束。', win: true },
+  buddy: {
+    office: true, title: '工位有人', win: true, clock: '离席中',
+    copy: '林同事把你的外套搭在椅背上，替你喊了声到。会议纪要写着「外套全程未提出异议」。',
+    hint: '林同事问，你离席之后，他该替你拦住谁？',
+  },
+  annoying: {
+    office: true, title: '最后补充一句', win: false,
+    copy: '周同事把你设成「可选参会人」。系统把它理解成「由周同事选择你参加」。他选了八次，说每次都只耽误两分钟。',
+    hint: '再找个人加进名单，试试谁能接住他的最后一句。',
+  },
+  bathroom: {
+    office: true, title: '移动工位', win: true, clock: '离席中',
+    copy: '系统把最后一个隔间设成临时工位。门刚锁上，行政就发来工位满意度调查，唯一选项是「占用中」。',
+    hint: '隔间外来了个人。你可以改改名单，决定来的是谁。',
+  },
+  closedLoop: {
+    requires: ['buddy', 'annoying', 'zero'], title: '第零分钟的闭环', win: true,
+    copy: '周同事刚说「我最后补充一句」，林同事就接上「你这句补得好」。系统没给这两句话分配时间，于是它们在会议录音的 00:00 来回播放。你拔了耳机，下班。',
+  },
+  restroomOffice: {
+    requires: ['buddy', 'annoying', 'bathroom'], title: '独立办公室', win: true, clock: '离席中',
+    copy: '林同事在门外挂了块「维修中」。周同事看见三个字，立刻发起「关于维修的同步会」。系统缺一间小会议室，把你的隔间就地升格。你终于有了独立办公室，虽然工位门上写着「使用后请冲水」。',
+  },
+  absentYesterday: {
+    requires: ['yesterday', 'empty'], title: '昨天旷工了', win: true,
+    copy: '系统向「无人」发了补签通知。「无人」没回。行政部给「昨天」记了旷工，今天一早就来替昨天写检讨。',
+  },
+  borrowedMinutes: {
+    requires: ['boss', 'zero'], title: '两分钟去哪了', win: true,
+    copy: '老板在一场零分钟的会上说「我只占两分钟」。系统从他明天的午休里扣了两分钟。月底盘点，那两分钟还在会议室里开会。',
+  },
+  doorLock: {
+    requires: ['buddy', 'bathroom'], title: '门锁替你打卡', win: true, clock: '离席中',
+    copy: '林同事在隔间外帮你喊「里面有人」。系统把门锁的红色状态录为「出席」。半小时后，门锁被评为本次会议最积极的参会人。',
+  },
+  flush: {
+    requires: ['annoying', 'bathroom'], title: '隔门同步', win: true, clock: '离席中',
+    copy: '周同事追到隔间门口，说「我就同步一下」。会议字幕把冲水声识别成了「我没有补充」，这是他今天唯一一句被系统采纳的话。',
+  },
+  aligned: {
+    requires: ['buddy', 'annoying'], title: '对齐到无法移动', win: true, clock: '离席中',
+    copy: '林同事接过话头，说「来，我跟你对齐一下」。系统把两人对齐到同一个像素。周同事还想追出来，得先点「取消组合」。',
+    hint: '要是这场会连一分钟都没有，他俩还对得上话吗？',
+  },
+  bossZhouMarathon: {
+    requires: ['manager', 'annoying', 'long'], title: '两个人的循环会议', win: true,
+    copy: '周同事把整场会用来「最后补充一句」。老板终于插上话：「能不能长话短说？」系统把这句设成新议题，续订了一场同样长的会。续订通知只发给了他们俩。',
+  },
+  buddyZhouMarathon: {
+    requires: ['buddy', 'annoying', 'long'], title: '带薪播客', win: true,
+    copy: '林同事把周同事的发言剪成一期播客。片头是「最后补充一句」，片尾是「下期继续补充」。后台显示唯一订阅者是周同事，他还开了自动续订。',
+  },
+  bossZhou: {
+    requires: ['manager', 'annoying'], title: '散会待审批', win: true,
+    copy: '老板说散会，周同事问要不要先对齐一下散会标准。两人互相抄送了对方，最后系统显示「审批卡在老板那里，老板卡在会议室里」。',
+  },
+  zhouMarathon: {
+    requires: ['annoying', 'long'], title: '本场会议有中场休息', win: true,
+    copy: '周同事说累了，给自己的最后一句申请了中场休息。系统发现休息比会议有用，把它安排成了正式议程。你在休息开始时走了。',
+  },
+  long: {
+    office: true, title: '会议跨餐了', win: false,
+    copy: '行政部发现这场会跨过了晚饭，送来一张菜单。老板问要不要先开个短会，讨论一下大家吃什么。',
+    hint: '这么长的会，留给哪几个人开比较合适？',
+  },
+  robot: { chapter: 1, title: '一人分饰十一角', copy: '机器人代主持人念完页脚「第 1 页，共 1 页」，随后用十一种声音宣布散会。纪要只有一页，因为再多一页它就得重新念。', win: true },
+  printer: { chapter: 1, title: '行政已阅', copy: '文档主持，打印机盖章。全场没有一个人开口。行政部翻了翻纪要，批注「流程完整，下次照办」。', win: true },
+  wrongPage: { chapter: 1, title: '请翻下一页', copy: '周同事把签字页翻过去，说还有一点没讲。打印机只好把散会章盖到下一页。下一页也有一点没讲。', hint: '谁主持，谁就能决定要不要翻页。' },
+  reprint: { chapter: 1, title: '最后一句补印了', copy: '周同事每补充一句，打印机就自动续一页。保洁用纪要垫平了全楼的桌腿，他还在补充。' },
+  avatar: { chapter: 1, title: '主持人被归档', copy: '机器人找不到纸，把电子章盖在了周同事的头像上。周同事成了只读，会议没人主持，系统给你发来了主持邀请。' },
+  lastWord: { chapter: 1, title: '最后一句.exe', copy: '周同事刚说「最后」，机器人就帮他补全了「一句」。系统判定有人抢话，请周同事重新开始。' },
+  silent: { chapter: 1, title: '无声加班', copy: '打印机吐出一张「我说完了」。系统提示「未检测到发言」。会议室的声控灯已经灭了，散会按钮还亮着。', hint: '这回需要一位能出声的记录员。' },
+  pageCount: { chapter: 1, title: '盖一次，多一页', copy: '机器人尝试把电子章盖在第 1 页，系统把章另存成了第 2 页。现在还差第 2 页的章。', hint: '要么找真正会盖章的，要么换个散会条件。' },
+};
+const combinations = Object.entries(endings)
+  .filter(([, ending]) => ending.requires)
+  .sort(([, left], [, right]) => right.requires.length - left.requires.length);
+const colleagueRoles = new Map([
+  ['林同事', 'buddy'], ['上班搭子', 'buddy'], ['搭子', 'buddy'],
+  ['周同事', 'annoying'], ['烦人精', 'annoying'],
+  ['老板', 'manager'], ['领导', 'manager'], ['总经理', 'manager'], ['董事长', 'manager'],
+]);
+const reviewOutcomes = {
+  'zhou-printer-stamp': 'wrongPage',
+  'zhou-printer-speech': 'reprint',
+  'zhou-robot-stamp': 'avatar',
+  'zhou-robot-speech': 'lastWord',
+  'document-printer-stamp': 'printer',
+  'document-printer-speech': 'silent',
+  'document-robot-stamp': 'pageCount',
+  'document-robot-speech': 'robot',
+};
+const storageKey = 'office-1759-endings';
+let found = new Set();
+try {
+  const previous = JSON.parse(localStorage.getItem(storageKey) || '[]');
+  if (Array.isArray(previous)) found = new Set(previous.filter((key) => Object.hasOwn(endings, key)));
+} catch {}
+const states = chapters.map(({ initial }) => ({ saved: { ...initial }, draft: { ...initial }, result: null, history: [] }));
+let chapter = 0;
+let state = states[chapter];
+
+function draft() {
+  if (chapter) {
+    const values = { ...chapters[chapter].initial };
+    reviewControls.forEach((control) => {
+      if (control.checked) values[control.name] = control.value;
+    });
+    return values;
+  }
+  return Object.fromEntries(fields.map((field) => [field.id, field.value.trim()]));
+}
+
+function differing(left, right) {
+  return Object.keys(left).filter((key) => left[key] !== right[key]);
+}
+
+function compact(value) {
+  return value.normalize('NFKC').replace(/\s/gu, '');
+}
+
+function durationMinutes(text) {
+  const minutes = /^(\d+)(?:分钟|分)?$/u.exec(text);
+  if (minutes) return Number(minutes[1]);
+  const hours = /^(\d+)小时(?:(\d+)(?:分钟|分))?$/u.exec(text);
+  return hours ? 60 * Number(hours[1]) + Number(hours[2] ?? 0) : null;
+}
+
+function evaluateMeeting(notice) {
+  const clean = (value) => compact(value).replace(/[：:，。、]/gu, '');
+  const time = clean(notice.time);
+  const duration = clean(notice.duration);
+  const people = clean(notice.people);
+  const topic = clean(notice.topic);
+  const roles = compact(notice.people).split(/[、,+/&和与及]/u).map((name) => colleagueRoles.get(name));
+  const invitedRoles = roles.every(Boolean) ? new Set(roles) : new Set();
+  const matched = {
+    yesterday: /^(昨天|昨日|前天|昨晚)/u.test(time),
+    empty: /^(无|无人|无参会人|没有人|空|0|0人|取消参会|全员缺席|全体缺席)?$/u.test(people),
+    boss: /^(只有|仅限|仅)?(老板|领导|总经理|董事长)(一个人|一人|独自参会|本人)?$/u.test(people),
+    zero: /^(0+(\.0+)?|零|〇)(分钟|分|秒|小时)?$/u.test(duration),
+    home: /^(全员|全体|现在|立即|直接|提前|准时|大家)?下班(回家)?$|^回家$/u.test(topic),
+    buddy: invitedRoles.has('buddy'),
+    annoying: invitedRoles.has('annoying'),
+    bathroom: /^(去|上)?(厕所|洗手间|卫生间)(摸鱼)?$/u.test(topic),
+    manager: invitedRoles.has('manager'),
+    long: durationMinutes(duration) >= 120,
+  };
+  // Three-instruction endings are checked before their pairs.
+  const combined = combinations.find(([, ending]) => ending.requires.every((rule) => matched[rule]));
+  return combined?.[0] ?? Object.keys(matched).find((key) => matched[key] && Object.hasOwn(endings, key)) ?? null;
+}
+
+function meetingResponse(notice) {
+  const edited = differing(notice, chapters[0].initial);
+  if (!edited.length) return { title: '会议照常', copy: '行政部已按原通知发出邀请。', hint: '林同事：先只改右边一格，看看系统会怎么理解。' };
+  const hints = {
+    time: '试着想想，日历会怎么处理一场已经过去的会议？',
+    duration: '会议能不能发出去，也取决于邀请名单上写了谁。',
+    people: '通知还能安排一场早已结束的会吗？',
+    topic: '系统会照字面执行议题。换成一件大家现在更想做的事呢？',
+  };
+  return { title: '会议照常', copy: '行政部收到了修订，邀请还挂在日历上。', hint: hints[edited[0]] };
+}
+
+function reviewUnlocked() {
+  return Object.entries(endings).some(([key, ending]) => !ending.chapter && ending.win && found.has(key));
+}
+
+function drawEndingGroup(entries, count, list, lockedLabel) {
+  count.textContent = entries.filter(([key]) => found.has(key)).length + ' / ' + entries.length;
+  list.replaceChildren(...entries.map(([key, ending], index) => {
+    const unlocked = found.has(key);
+    const row = document.createElement('li');
+    row.className = unlocked ? 'slot found' : 'slot';
+    row.innerHTML = '<svg class="icon" aria-hidden="true"><use href="#' + (unlocked ? 'check' : 'lock') + '-icon"/></svg>';
+    row.append(unlocked ? ending.title : lockedLabel + String(index + 1).padStart(2, '0'));
+    return row;
+  }));
+}
+
+function drawProgress() {
+  const available = Object.entries(endings).filter(([, ending]) => (ending.chapter ?? 0) === chapter);
+  const office = available.filter(([, ending]) => ending.office || ending.requires);
+  const regular = available.filter(([, ending]) => !ending.office && !ending.requires);
+  drawEndingGroup(regular, $('count'), $('slots'), '未发现结局 ');
+  $('office-progress').hidden = !office.length;
+  if (office.length) drawEndingGroup(office, $('office-count'), $('office-slots'), '支线 ');
+  $('chapter-tools').hidden = !reviewUnlocked();
+}
+
+function syncControls() {
+  const edited = differing(draft(), state.saved);
+  const { initial } = chapters[chapter];
+  $('doc-state').textContent = edited.length ? '有未保存的修改' : '已保存';
+  if (!chapter) fields.forEach((field) => field.classList.toggle('changed', field.value.trim() !== initial[field.id]));
+  document.querySelectorAll('[data-action="undo"]').forEach((button) => {
+    button.disabled = !state.history.length && !edited.length;
+  });
+}
+
+function showResult(result) {
+  $('result-title').textContent = result?.title ?? '';
+  $('result-copy').textContent = result?.copy ?? '';
+  $('result-hint').textContent = result?.hint ? '提示　' + result.hint : '';
+  $('result-hint').hidden = !result?.hint;
+  $('result-next').hidden = chapter !== 0 || !result?.win;
+  $('response').classList.toggle('win', Boolean(result?.win));
+  $('response').hidden = !result;
+  $('clock').textContent = result?.clock ?? (result?.win ? (chapter ? '已归档' : '已下班') : '17:59');
+}
+
+function fill(values) {
+  if (chapter) {
+    reviewControls.forEach((control) => { control.checked = values[control.name] === control.value; });
+  } else {
+    fields.forEach((field) => { field.value = values[field.id]; });
+  }
+  syncControls();
+}
+
+function save() {
+  const next = draft();
+  const blank = Object.keys(next).find((key) => !next[key] && key !== 'people');
+  if (blank) {
+    if (chapter) {
+      showResult({ title: '还有修订待处理', copy: '请先决定怎么处理「' + reviewEdits[blank].label + '」这条修订。', hint: '接受修订会采用蓝字，拒绝修订会保留原文。' });
+      reviewControls.find((control) => control.name === blank).focus();
+    } else {
+      showResult({ title: '通知未发出', copy: labels[blank] + '还没填。行政部正在盯着这一格。' });
+      $(blank).focus();
+    }
+    return;
+  }
+  if (differing(next, state.saved).length) {
+    state.history.push({ values: state.saved, result: state.result });
+    state.saved = next;
+  }
+  const key = chapter ? reviewOutcomes[[next.host, next.recorder, next.close].join('-')] : evaluateMeeting(next);
+  state.result = key ? endings[key] : meetingResponse(next);
+  if (key && !found.has(key)) {
+    found.add(key);
+    try { localStorage.setItem(storageKey, JSON.stringify([...found])); } catch {}
+    drawProgress();
+  }
+  fill(state.saved);
+  showResult(state.result);
+  const response = $('response');
+  if (response.getBoundingClientRect().bottom > window.innerHeight - 30) response.scrollIntoView({ block: 'center' });
+}
+
+function undo() {
+  if (differing(draft(), state.saved).length) {
+    fill(state.saved);
+    showResult(state.result);
+    return;
+  }
+  const prior = state.history.pop();
+  if (!prior) return;
+  const afterWin = !chapter && state.result?.win && !prior.result?.win;
+  state.saved = prior.values;
+  state.result = prior.result;
+  fill(state.saved);
+  showResult(afterWin
+    ? { title: '已撤销 · 会议回来了', copy: '老板留了一条批注「谁把我从电梯里撤销回来了？」' }
+    : state.result ?? { title: '已撤销', copy: '文档已恢复到上一版。' });
+}
+
+function reset() {
+  state.history.length = 0;
+  state.saved = { ...chapters[chapter].initial };
+  state.result = null;
+  fill(state.saved);
+  showResult(null);
+}
+
+function showDialog(title, body) {
+  $('dialog-title').textContent = title;
+  $('dialog-body').replaceChildren(...body);
+  if (!$('dialog').open) $('dialog').showModal();
+}
+
+function paragraph(value, className = '') {
+  const node = document.createElement('p');
+  node.textContent = value;
+  node.className = className;
+  return node;
+}
+
+function attachment() {
+  const { attachment: title, rules } = chapters[chapter];
+  showDialog('附件 1｜' + title, rules.map((rule) => paragraph(rule)));
+}
+
+function revisions() {
+  const { initial } = chapters[chapter];
+  const changes = differing(state.saved, initial);
+  const rows = changes.map((key) => {
+    if (!chapter) return paragraph(labels[key] + '　' + initial[key] + ' → ' + (state.saved[key] || '（空白）'));
+    const edit = reviewEdits[key];
+    const accepted = state.saved[key] === edit.after.value;
+    return paragraph(edit.label + '　' + (accepted ? '已接受 · ' + edit.after.text : '已拒绝 · ' + edit.before.text));
+  });
+  showDialog('修订记录', rows.length ? rows : [paragraph('暂无已保存的修订。')]);
+}
+
+function renderChapter() {
+  const doc = chapters[chapter];
+  const filename = doc.title + '.docx';
+  document.title = filename + ' - Word';
+  $('doc-name').textContent = filename;
+  $('doc-number').textContent = '行字〔1759〕0' + (chapter + 1) + ' 号';
+  $('doc-title').textContent = doc.title;
+  $('doc-subtitle').textContent = doc.subtitle;
+  $('doc-intro').textContent = doc.intro;
+  $('doc-outro').textContent = doc.outro;
+  $('comment-copy').textContent = doc.comment;
+  $('zhou-copy').textContent = doc.zhou;
+  $('meeting-fields').hidden = Boolean(chapter);
+  $('review-fields').hidden = !chapter;
+  const saveLabel = chapter ? '保存纪要' : '保存通知';
+  $('save-label').textContent = saveLabel;
+  $('quick-save').setAttribute('aria-label', saveLabel);
+  $('edit-guide').textContent = chapter ? '逐条接受或拒绝修订，再保存纪要' : '直接修改表格右列，再保存试试';
+  $('chapter-name').textContent = doc.name;
+  $('attachment-link').textContent = '附件 1　' + doc.attachment;
+  $('chapter-button').textContent = chapter ? '返回会议通知' : '打开复盘纪要';
+  fill(state.draft);
+  showResult(state.result);
+  drawProgress();
+}
+
+function switchChapter() {
+  if (!reviewUnlocked()) return;
+  state.draft = draft();
+  chapter = 1 - chapter;
+  state = states[chapter];
+  renderChapter();
+  window.scrollTo(0, 0);
+  $('doc-title').focus({ preventScroll: true });
+}
+
+function comments() {
+  const panel = $('comments');
+  panel.hidden = !panel.hidden;
+  $('workspace').classList.toggle('focus', panel.hidden);
+  document.querySelectorAll('[aria-controls="comments"]').forEach((button) => button.setAttribute('aria-expanded', String(!panel.hidden)));
+  if (panel.hidden) document.querySelector('.comment-toggle').focus();
+}
+
+function selectTab(button) {
+  document.querySelectorAll('[data-tab]').forEach((tab) => {
+    tab.setAttribute('aria-selected', String(tab === button));
+    tab.tabIndex = tab === button ? 0 : -1;
+  });
+  document.querySelectorAll('[data-ribbon]').forEach((group) => { group.hidden = group.dataset.ribbon !== button.dataset.tab; });
+  $('ribbon').setAttribute('aria-labelledby', button.id);
+}
+
+const actions = { undo, reset, attachment, history: revisions, comments, chapter: switchChapter };
+document.addEventListener('click', (event) => {
+  const action = event.target.closest('[data-action]');
+  if (action) {
+    event.preventDefault();
+    actions[action.dataset.action]();
+  }
+  const tab = event.target.closest('[data-tab]');
+  if (tab) selectTab(tab);
+});
+document.querySelector('[role="tablist"]').addEventListener('keydown', (event) => {
+  const tabs = [...document.querySelectorAll('[data-tab]')];
+  const index = tabs.indexOf(event.target);
+  if (index === -1) return;
+  const move = { ArrowLeft: (index + tabs.length - 1) % tabs.length, ArrowRight: (index + 1) % tabs.length, Home: 0, End: tabs.length - 1 };
+  if (!Object.hasOwn(move, event.key)) return;
+  event.preventDefault();
+  selectTab(tabs[move[event.key]]);
+  tabs[move[event.key]].focus();
+});
+$('notice').addEventListener('input', syncControls);
+$('notice').addEventListener('submit', (event) => {
+  event.preventDefault();
+  save();
+});
+$('close-dialog').addEventListener('click', () => $('dialog').close());
+document.addEventListener('keydown', (event) => {
+  if ((!event.ctrlKey && !event.metaKey) || event.altKey || event.shiftKey || event.isComposing || $('dialog').open) return;
+  const key = event.key.toLowerCase();
+  if (key === 's') {
+    event.preventDefault();
+    save();
+  }
+  if (key === 'z' && !(fields.includes(event.target) && differing(draft(), state.saved).length)) {
+    event.preventDefault();
+    undo();
+  }
+});
+renderChapter();
+</script>
+</body>
+</html>
